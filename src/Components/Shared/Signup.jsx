@@ -2,21 +2,28 @@ import React, { useCallback, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { authContext } from '../../Context/Authprovider';
 import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import { useDropzone } from 'react-dropzone'
 
 
 export const Signup = () => {
-
-
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { signupEmail, profileupdate } = useContext(authContext)
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate()
+
+
 
     const handleShowPassword = () => {
         setOpen(!open)
     }
+
+
+
+
+
+
 
 
     const handleSignup = (data) => {
@@ -24,36 +31,70 @@ export const Signup = () => {
         console.log('Form submitted:', data);
 
         const fullName = `${data.first_name} ${data.last_name}`
+
+
         console.log(fullName)
+
+
+        const image = data.image[0]
+        const formData = new FormData();
+        formData.append("image", image);
+
 
         signupEmail(data.email, data.password)
             .then(res => {
                 console.log(res.user)
                 toast.success("Successly sign up")
+
+                fetch("https://api.imgbb.com/1/upload?&key=fb70d1eaaaaf3643c06f16d2e654b7a0", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then((res) => res.json())
+                    .then((imageData) => {
+                        console.log(imageData.data.url)
+                        const userData = {
+                            username: data.fullName,
+                            email: data.email,
+                            bio: data.bio,
+                            image: imageData.data.url
+                        }
+                        console.log("user info", userData)
+
+                        userPost(userData)
+                    })
+
+                    .catch((err) => console.log(err))
+
                 profileupdate({ displayName: data.fullName })
                     .then(() => { })
                     .catch(e => console.error(e))
 
             })
             .catch(e => console.error(e))
-
     };
 
 
 
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    function userPost(user) {
+        fetch("http://localhost:5000/users", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                navigate("/")
+                console.log(data)
+            })
+            .catch((err) => console.log(err))
+    }
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setSelectedImage(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+
+
 
 
 
@@ -62,39 +103,65 @@ export const Signup = () => {
         <div className='w-4/5 shadow-xl rounded-md mx-auto md:mx-auto md:mx-0 md:w-2/5 pt-5 pb-10 mt-10 mb-20 px-8  border-2 border-opacity-10 border-blue-600 bg-white '>
             <h1 className='text-xl font-bold text-center mb-5'>Sign Up</h1>
 
-            <img src="" className='' alt="" />
+
+
+
+
+            {/* <form onSubmit={handleSubmit(handleProfilePic)} action="" className="flex flex-col items-center">
+                {selectedImage && (
+                    <img
+                        src={selectedImage}
+                        alt="Selected"
+                        className="w-20 h-20 rounded-full  mb-4"
+                    />
+                )}
+
+                {
+                    !selectedImage &&
+                    <img className="w-20 h-20 rounded-full  mb-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtWeMk10Jucx-7keCNxddBfx2sfK92_DKbHQ&usqp=CAU" alt="" />
+
+                }
+
+                <div className='flex gap-2 justify-center items-center mb-8'>
+                    <input
+                        required
+                        type="file"
+                        {...register("img")}
+                        onChange={handleImageChange}
+                        className=" p-1 border border-slate-600 rounded"
+                    />
+                    <button type='submit' className='py-1 px-3 bg-blue-700 rounded-full text-white font-bold'>Selete</button>
+                </div>
+            </form> */}
 
 
 
             <form onSubmit={handleSubmit(handleSignup)} action="">
 
-
-
-
-
-                <div className="flex flex-col items-center">
-                    {selectedImage && (
-                        <img
-                            src={selectedImage}
-                            alt="Selected"
-                            className="w-20 h-20 rounded-full  mb-4"
-                        />
-                    )}
-
-                    {
-                        !selectedImage && 
-                    <img  className="w-20 h-20 rounded-full  mb-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtWeMk10Jucx-7keCNxddBfx2sfK92_DKbHQ&usqp=CAU" alt="" />
-
-                    }
-                    <input
-                        placeholder='Selete your image'
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className=" p-1 w-1/2 border border-slate-600 rounded mb-8"
+                {/* 
+            {selectedImage && (
+                    <img
+                        src={selectedImage}
+                        alt="Selected"
+                        className="w-20 h-20 rounded-full  mb-4"
                     />
-                </div>
+                )}
 
+                {
+                    !selectedImage &&
+                    <img className="w-20 h-20 rounded-full  mb-4" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtWeMk10Jucx-7keCNxddBfx2sfK92_DKbHQ&usqp=CAU" alt="" />
+
+                }
+
+                <div className='flex gap-2 justify-center items-center mb-8'>
+                    <input
+                        required
+                        type="file"
+                        {...register("img")}
+                        onChange={handleImageChange}
+                        className=" p-1 border border-slate-600 rounded"
+                    />
+                </div> */}
 
 
 
@@ -133,15 +200,27 @@ export const Signup = () => {
                 </div>
 
 
+           
+
+
 
                 <div className='flex flex-col mt-3'>
                     <label className='font-semibold mb-1'>What do you do?</label>
-                    <input
+                    <textarea
                         placeholder='Your bio'
                         className='w-full  border-slate-600 p-2 border rounded'
                         type="text"
-                        name="title"
-                        {...register("title", { required: true })} />
+                        name="bio"
+                        {...register("bio", { required: true })} />
+                </div>
+
+                <div className='flex flex-col mt-3'>
+                    <label className='font-semibold '>Profile picture</label>
+                    <input
+                        type="file"
+                        {...register("image")}
+                        className="w-full mt-1 border-slate-600 p-2 border rounded"
+                    />
                 </div>
 
                 <div className='flex flex-col my-3'>
