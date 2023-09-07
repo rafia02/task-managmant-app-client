@@ -90,7 +90,7 @@ export const Signup = () => {
                 navigate("/")
                 console.log(data)
             })
-            .catch((err) => console.log(err))
+            .catch((e) => console.log(e))
     }
 
 
