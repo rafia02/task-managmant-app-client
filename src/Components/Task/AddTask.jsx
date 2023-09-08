@@ -4,12 +4,13 @@ import { toast } from 'react-hot-toast';
 import { authContext } from '../../Context/Authprovider';
 import { Spinner } from '../Shared/Spinner';
 import Select from 'react-select';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export const AddTask = () => {
 
-
+    const navigate = useNavigate()
     const { user } = useContext(authContext)
     const [members, setMembers] = useState([])
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -17,18 +18,18 @@ export const AddTask = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:5000/teams?email=${user?.email}`)
+        fetch(`http://localhost:5000/users`)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                setMembers(data.peoples)
+                setMembers(data)
 
             })
             .catch(e => console.error(e))
     }, [user?.email])
 
 
- console.log(members)
+    console.log(members)
 
     const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -71,6 +72,7 @@ export const AddTask = () => {
                 console.log(data)
                 toast.success("successfully add task")
                 reset();
+                navigate("/home/alltask")
             })
             .catch((e) => console.log(e))
 
@@ -79,7 +81,7 @@ export const AddTask = () => {
     console.log(selectedUsers)
 
     return (
-        <div className='w-full px-4 md:w-2/3 mx-auto'>
+        <div className='w-full px-4 mt-6 md:w-2/3 mx-auto'>
             <h1 className='text-xl mb-3 font-bold text-center'>Add a new task</h1>
 
             <div className=" rounded-lg p-4 shadow-md shadow-gray-400">
@@ -129,7 +131,7 @@ export const AddTask = () => {
 
 
                     <div>
-                        
+
 
                         <div className="mt-4">
                             <h3 className="text-lg font-semibold">Selected Team Members:</h3>
@@ -142,19 +144,19 @@ export const AddTask = () => {
 
                         <div className="mt-2 space-y-2">
                             {members?.map((user) => (
-                             
+
                                 <label key={user} className="flex items-center space-x-2">
                                     <input
                                         type="checkbox"
-                                        checked={selectedUsers.includes(user)}
-                                        onChange={() => handleUserSelect(user)}
+                                        checked={selectedUsers.includes(user.username)}
+                                        onChange={() => handleUserSelect(user.username)}
                                         className="text-blue-600"
                                     />
-                                    <option>{user}</option>
+                                    <option>{user.username}</option>
                                 </label>
                             ))}
                         </div>
-                        
+
                     </div>
 
 

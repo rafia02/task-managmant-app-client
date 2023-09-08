@@ -12,7 +12,7 @@ export const Signup = () => {
     const { signupEmail, profileupdate } = useContext(authContext)
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
-    const [imageLink, setImageLink] = useState("")
+
 
 
 
@@ -54,7 +54,12 @@ export const Signup = () => {
                     .then((res) => res.json())
                     .then((imageData) => {
                         console.log(imageData.data.url)
-                        setImageLink(imageData.data.url)
+          
+                        profileupdate({ displayName: fullName, photoURL: imageData.data.url})
+                            .then(() => { })
+                            .catch(e => console.error(e))
+
+                            
                         const userData = {
                             username: fullName,
                             email: data.email,
@@ -68,9 +73,7 @@ export const Signup = () => {
 
                     .catch((err) => console.log(err))
 
-                profileupdate({ displayName: fullName, photoURL: imageLink})
-                    .then(() => { })
-                    .catch(e => console.error(e))
+
 
             })
             .catch(e => console.error(e))
@@ -202,7 +205,7 @@ export const Signup = () => {
                 </div>
 
 
-           
+
 
 
 

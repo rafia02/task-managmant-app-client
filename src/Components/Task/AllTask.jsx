@@ -18,7 +18,7 @@ export const AllTask = () => {
 
     return (
         <div>
-            <h1 className='text-xl font-bold text-center'>My tasks</h1>
+            <h1 className='text-xl font-bold text-center mt-6 mb-5'>My tasks</h1>
 
             <div>
                 {

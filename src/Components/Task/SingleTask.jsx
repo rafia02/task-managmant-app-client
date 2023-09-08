@@ -1,10 +1,32 @@
-import React from 'react'
+import React, { useReducer } from 'react'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 export const SingleTask = ({ task }) => {
+    const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
     const { title, description, dueDate, completed, _id, priority, manager, team_Member } = task
+    const navigate = useNavigate()
+    const handleComplite = (id) => {
+        fetch(`http://localhost:5000/tasks/${id}`, {
+            method: "PATCH",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({ completed: true })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                toast.success("successfully complited")
+                forceUpdate();
+                navigate("/home/dashbord/complited")
+            })
+            .catch(e => console.error(e))
+
+    }
     return (
         <div className='w-4/5 mx-auto'>
-            <div key={_id} className=" p-4 shadow-xl shadow-gray-300  mb-20 rounded-lg">
+            <div key={_id} className=" p-4 shadow-md shadow-gray-300 bg-gray-50 mb-20 rounded-lg">
                 <div className='flex justify-between mb-3 items-center'>
                     <h2 className="text-xl my-1 font-medium">{title}</h2>
                     <p className='font-bold'>Task Manager : {manager}</p>
@@ -19,9 +41,23 @@ export const SingleTask = ({ task }) => {
                         team_Member.map(t => <p className='border border-gray-500 py-[1px] bg-gray-100 px-2 rounded-full' key={t}>{t}</p>)
                     }
                 </div>
-                <button className='bg-blue-600 rounded-xl mt-5 font-bold text-white  py-1 px-5'>
-                    {completed ? 'Completed' : 'In Progress'}
-                </button>
+
+
+
+
+
+                <div className='flex justify-between'>
+                    <button className='bg-blue-600 rounded-xl mt-5 font-bold text-white  py-1 px-5'>
+                        {completed ? 'Completed' : 'Pending'}
+                    </button>
+
+                    {
+                        !completed &&
+                        <button onClick={() => handleComplite(_id)} className='bg-blue-600 rounded-xl mt-5 font-bold text-white  py-1 px-5'>
+                            Make Complite
+                        </button>
+                    }
+                </div>
             </div>
         </div>
     )

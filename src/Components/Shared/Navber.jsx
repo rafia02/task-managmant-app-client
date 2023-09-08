@@ -38,7 +38,7 @@ export const Navber = () => {
 
   </>
   return (
-    <div className='py-5 px-2'>
+    <div className='py-5 px-2 bg-blue-900 text-white '>
       <nav className='flex justify-between items-center'>
         <div className='flex items-center gap-5'>
 

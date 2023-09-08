@@ -70,8 +70,8 @@ export const Addteam = () => {
 
 
     return (
-        <div className='w-2/3 mx-auto'>
-            <h1 className='text-xl font-bold text-center'>Add a team collaboration</h1>
+        <div className=' w-11/12 md:w-2/3 bg-gray-50 mt-6 shadow-xl my-5 px-10 py-5 mx-auto'>
+            <h1 className='text-xl font-bold mb-3 text-center'>Add a team collaboration</h1>
 
             <form onSubmit={handleSubmit(handleTeam)} action="">
                 <div className='flex flex-col'>
@@ -84,17 +84,6 @@ export const Addteam = () => {
 
                 </div>
 
-                {/* <div className='flex flex-col my-3'>
-                    <label className='font-semibold mb-1'>Invite a people</label>
-                    <input
-                        placeholder='Password'
-                        className='w-full  border-slate-600 p-2 border rounded'
-                        type="text"
-                        name="team"
-                        {...register("team", require)} />
-
-                </div> */}
-
                 <div className="mt-4">
                     <h3 className=" font-semibold">Invite people for your team</h3>
                     <div className="border flex gap-2 w-full px-3 py-5 mt-1 border-gray-600 rounded-md">
@@ -105,7 +94,7 @@ export const Addteam = () => {
                 </div>
 
 
-                <div className=" grid grid-cols-3 gap-5 rounded p-2">
+                <div className=" grid grid-cols-1 md:grid-cols-3 gap-5 rounded p-2">
                     {members.map((option) => (
                         <label key={option} className="">
                             <input
