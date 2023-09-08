@@ -1,21 +1,60 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from "react-hook-form";
 import { toast } from 'react-hot-toast';
 import { authContext } from '../../Context/Authprovider';
+import { Spinner } from '../Shared/Spinner';
+import Select from 'react-select';
+
+
+
 export const AddTask = () => {
-    const {user} = useContext(authContext)
+
+
+    const { user } = useContext(authContext)
+    const [members, setMembers] = useState([])
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/teams?email=${user?.email}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                setMembers(data.peoples)
+
+            })
+            .catch(e => console.error(e))
+    }, [user?.email])
+
+
+ console.log(members)
+
+    const [selectedUsers, setSelectedUsers] = useState([]);
+
+    const handleUserSelect = (user) => {
+        if (selectedUsers.includes(user)) {
+            setSelectedUsers(selectedUsers.filter((selected) => selected !== user));
+        } else {
+            setSelectedUsers([...selectedUsers, user]);
+        }
+    };
+
+
 
     const onSubmitHandler = (data) => {
         console.log(data)
 
-        const taskData ={
-            manager: user?.displayName,
+
+        const taskData = {
+            manager: user.displayName,
             title: data.title,
             description: data.description,
             dueDate: data.dueDate,
             priority: data.priority,
-            completed: false
+            completed: false,
+            team_Member: selectedUsers,
+            email: user.email
 
         }
 
@@ -37,11 +76,14 @@ export const AddTask = () => {
 
     };
 
+    console.log(selectedUsers)
 
     return (
-        <div className='w-full px-8 py-5 md:w-1/2 mx-auto'>
+        <div className='w-full px-4 md:w-2/3 mx-auto'>
+            <h1 className='text-xl mb-3 font-bold text-center'>Add a new task</h1>
+
             <div className=" rounded-lg p-4 shadow-md shadow-gray-400">
-                <form onSubmit={handleSubmit(onSubmitHandler)}>
+                <form className='px-5' onSubmit={handleSubmit(onSubmitHandler)}>
                     <div className="mb-4">
                         <label className="block text-gray-600 font-semibold mb-2">Title</label>
                         <input
@@ -84,10 +126,44 @@ export const AddTask = () => {
                         {errors.priority && <p className="text-red-500 mt-2">Priority is required</p>}
                     </div>
 
-                    <div className="text-center">
+
+
+                    <div>
+                        
+
+                        <div className="mt-4">
+                            <h3 className="text-lg font-semibold">Selected Team Members:</h3>
+                            <div className="border flex gap-2 w-full px-3 py-5 mt-2 border-gray-600 rounded-md">
+                                {selectedUsers.map((user) => (
+                                    <p className='bg-blue-500 text-white font-bold rounded-lg py-1 px-2'>{user}</p>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-2 space-y-2">
+                            {members?.map((user) => (
+                             
+                                <label key={user} className="flex items-center space-x-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedUsers.includes(user)}
+                                        onChange={() => handleUserSelect(user)}
+                                        className="text-blue-600"
+                                    />
+                                    <option>{user}</option>
+                                </label>
+                            ))}
+                        </div>
+                        
+                    </div>
+
+
+
+
+                    <div className="text-center mt-5">
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+                            className="text-white font-bold px-4 py-2 text-center w-full mt-5 bg-blue-700 rounded-lg  hover:bg-blue-900 duration-500"
                         >
                             Add Task
                         </button>

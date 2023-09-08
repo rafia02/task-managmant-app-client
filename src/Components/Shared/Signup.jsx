@@ -12,6 +12,7 @@ export const Signup = () => {
     const { signupEmail, profileupdate } = useContext(authContext)
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
+    const [imageLink, setImageLink] = useState("")
 
 
 
@@ -46,15 +47,16 @@ export const Signup = () => {
                 console.log(res.user)
                 toast.success("Successly sign up")
 
-                fetch("https://api.imgbb.com/1/upload?&key=fb70d1eaaaaf3643c06f16d2e654b7a0", {
+                fetch("https://api.imgbb.com/1/upload?&key=4d5a64efec46b0e4ba427206e6bcef01", {
                     method: "POST",
                     body: formData
                 })
                     .then((res) => res.json())
                     .then((imageData) => {
                         console.log(imageData.data.url)
+                        setImageLink(imageData.data.url)
                         const userData = {
-                            username: data.fullName,
+                            username: fullName,
                             email: data.email,
                             bio: data.bio,
                             image: imageData.data.url
@@ -66,7 +68,7 @@ export const Signup = () => {
 
                     .catch((err) => console.log(err))
 
-                profileupdate({ displayName: data.fullName })
+                profileupdate({ displayName: fullName, photoURL: imageLink})
                     .then(() => { })
                     .catch(e => console.error(e))
 
@@ -87,7 +89,7 @@ export const Signup = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                navigate("/")
+                navigate("/home")
                 console.log(data)
             })
             .catch((e) => console.log(e))
