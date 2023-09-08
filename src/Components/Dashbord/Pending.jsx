@@ -17,8 +17,14 @@ export const Pending = () => {
 
 
     return (
+
+
         <div>
-            <h1 className='text-xl font-bold text-center mb-4'>Pending Task</h1>
+            {data.length < 1 ? <h1 className='text-xl font-bold text-center mb-4'>No Pending Task</h1>
+                :
+                <h1 className='text-xl font-bold text-center mb-4'>Pending Task</h1>
+            }
+
             {
                 data.map(d => <SingleTask task={d}></SingleTask>)
             }

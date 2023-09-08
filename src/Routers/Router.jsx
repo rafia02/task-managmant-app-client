@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
                 {path: "/home/addtask", element: <AddTask/>},
                 {path: "/home/alltask", element: <AllTask/>},
                 {path: "/home/addteam", element: <Addteam/>},
-                {path: "/home/dashbord", element: <DashbordLayout/>, children: [
+                {path: "/home/dashbord/", element: <DashbordLayout/>, children: [
                     {path: "/home/dashbord/complited", element: <Complited/>},
                     {path: "/home/dashbord/pending", element: <Pending/>},
                 ]}

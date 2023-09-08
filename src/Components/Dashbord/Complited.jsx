@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { authContext } from '../../Context/Authprovider'
-import {SingleTask} from "../../Components/Task/SingleTask";
+import { SingleTask } from "../../Components/Task/SingleTask";
 export const Complited = () => {
 
-  const {user} =  useContext(authContext)
+  const { user } = useContext(authContext)
   const [data, setData] = useState([])
 
   useEffect(() => {
@@ -19,9 +19,14 @@ export const Complited = () => {
 
   return (
     <div>
-         <h1 className='text-xl font-bold text-center mb-5'>Complited task</h1>
+
+      {data.length < 1 ? <h1 className='text-xl font-bold text-center mb-4'>No Complited task</h1>
+        :
+        <h1 className='text-xl font-bold text-center mb-4'>Complited task</h1>
+      }
+
       {
-        data.map(d =><SingleTask task={d}></SingleTask>)
+        data.map(d => <SingleTask task={d}></SingleTask>)
       }
     </div>
   )
