@@ -6,7 +6,7 @@ export const Pending = () => {
     const { user } = useContext(authContext)
     const [data, setData] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:5000/tasks/filter/pending?email=${user?.email}`)
+        fetch(`https://task-managment-app-server.vercel.app/tasks/filter/pending?email=${user?.email}`)
             .then(res => res.json())
             .then(data => {
                 setData(data)

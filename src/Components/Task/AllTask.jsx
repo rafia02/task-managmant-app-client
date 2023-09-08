@@ -6,7 +6,7 @@ export const AllTask = () => {
     const { user } = useContext(authContext)
     const [tasks, setTasks] = useState([])
     useEffect(() => {
-        fetch(`http://localhost:5000/tasks?email=${user?.email}`)
+        fetch(`https://task-managment-app-server.vercel.app/tasks?email=${user?.email}`)
             .then(res => res.json())
             .then(data => {
                 setTasks(data)

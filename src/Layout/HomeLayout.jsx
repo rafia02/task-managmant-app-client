@@ -18,7 +18,7 @@ export const HomeLayout = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:5000/users/id?email=${user?.email}`)
+        fetch(`https://task-managment-app-server.vercel.app/users/id?email=${user?.email}`)
             .then(res => res.json())
             .then(data => {
                 setData(data)

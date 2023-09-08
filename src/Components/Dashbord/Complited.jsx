@@ -7,7 +7,7 @@ export const Complited = () => {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    fetch(`http://localhost:5000/tasks/filter?email=${user?.email}`)
+    fetch(`https://task-managment-app-server.vercel.app/tasks/filter?email=${user?.email}`)
       .then(res => res.json())
       .then(data => {
         setData(data)

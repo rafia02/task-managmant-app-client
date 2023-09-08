@@ -12,7 +12,7 @@ export const Addteam = () => {
     console.log(members)
 
     useEffect(() => {
-        fetch(`http://localhost:5000/users`)
+        fetch(`https://task-managment-app-server.vercel.app/users`)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
@@ -37,7 +37,7 @@ export const Addteam = () => {
 
         console.log(addTeamData)
 
-        fetch("http://localhost:5000/teams", {
+        fetch("https://task-managment-app-server.vercel.app/teams", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"

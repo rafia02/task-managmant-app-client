@@ -7,7 +7,7 @@ export const SingleTask = ({ task }) => {
     const { title, description, dueDate, completed, _id, priority, manager, team_Member } = task
     const navigate = useNavigate()
     const handleComplite = (id) => {
-        fetch(`http://localhost:5000/tasks/${id}`, {
+        fetch(`https://task-managment-app-server.vercel.app/tasks/${id}`, {
             method: "PATCH",
             headers: {
                 "content-type": "application/json"

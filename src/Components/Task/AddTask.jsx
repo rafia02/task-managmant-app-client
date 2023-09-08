@@ -18,7 +18,7 @@ export const AddTask = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:5000/users`)
+        fetch(`https://task-managment-app-server.vercel.app/users`)
             .then(res => res.json())
             .then(data => {
                 console.log(data)
@@ -59,7 +59,7 @@ export const AddTask = () => {
 
         }
 
-        fetch("http://localhost:5000/tasks", {
+        fetch("https://task-managment-app-server.vercel.app/tasks", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"

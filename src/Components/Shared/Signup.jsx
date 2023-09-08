@@ -83,7 +83,7 @@ export const Signup = () => {
 
 
     function userPost(user) {
-        fetch("http://localhost:5000/users", {
+        fetch("https://task-managment-app-server.vercel.app/users", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
